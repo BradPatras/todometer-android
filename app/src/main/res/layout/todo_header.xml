@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+    <TextView
+        android:id="@+id/day_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="30"
+        android:textColor="@android:color/white"
+        android:textSize="54sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/center_guideline"
+        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
+    />
+
+    <TextView
+        android:id="@+id/day_week_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Saturday"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="@id/center_guideline"
+        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
+        android:textSize="20sp"
+    />
+
+    <TextView
+        android:id="@+id/year_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/center_spacer"
+        app:layout_constraintLeft_toRightOf="@id/day_num_tv"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_marginLeft="4dp"
+        android:text="2018"
+    />
+
+    <TextView
+        android:id="@+id/month_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/center_spacer"
+        app:layout_constraintLeft_toRightOf="@id/day_num_tv"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Apr"
+    />
+
+    <View
+        android:id="@+id/center_spacer"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        app:layout_constraintTop_toTopOf="@id/center_guideline"
+        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
+    />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/center_guideline"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".3"
+    />
+
+	<FrameLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="16dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/day_num_tv">
+
+		<View
+			android:id="@+id/back_meter"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@drawable/rounded_dark"
+		/>
+
+		<View
+			android:id="@+id/later_meter"
+			android:layout_width="200dp"
+			android:layout_height="match_parent"
+			android:background="@drawable/left_rounded_yellow"
+		/>
+
+		<View
+			android:id="@+id/done_meter"
+			android:layout_width="50dp"
+			android:layout_height="match_parent"
+			android:background="@drawable/left_rounded_green"
+		/>
+
+	</FrameLayout>
+</android.support.constraint.ConstraintLayout>

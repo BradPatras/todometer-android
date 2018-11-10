@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#413d4e</color>
+    <color name="colorPrimaryDark">#2f2c36</color>
+    <color name="colorAccent">@color/meterGreen</color>
+    <color name="activityBackground">#413d4e</color>
+    <color name="meterYellow">#f1ff67</color>
+    <color name="meterGreen">#00e6a7</color>
+</resources>
