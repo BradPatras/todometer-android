@@ -2,23 +2,40 @@ package io.github.bradpatras.todometer.meter
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import io.github.bradpatras.todometer.R
 import kotlinx.android.synthetic.main.meter_view.view.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
+import android.view.ViewGroup
+import android.animation.ValueAnimator
+
+
 
 class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
-    val rootView = LayoutInflater.from(context).inflate(R.layout.meter_view, this) as ConstraintLayout
-    val dayNumTextView = day_num_tv
-    val dayWeekTextView = day_week_tv
-    val yearTextView = year_tv
-    val monthTextView = month_tv
-    val doneMeterView = done_meter
-    val laterMeterView = later_meter
+    private val rootView = LayoutInflater.from(context).inflate(R.layout.meter_view, this) as ConstraintLayout
+    private val dayNumTextView = day_num_tv
+    private val dayWeekTextView = day_week_tv
+    private val yearTextView = year_tv
+    private val monthTextView = month_tv
+    private val doneMeterView = done_meter
+    private val laterMeterView = later_meter
+
+    var laterMeterProgress: Float = 0.0f
+        set(value) {
+            field = value
+            updateMeter()
+        }
+
+    var doneMeterProgress: Float = 0.0f
+        set(value) {
+            field = value
+            updateMeter()
+        }
 
     init {
         val date = Date()
@@ -34,5 +51,47 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
 
         formatter.applyPattern("MMM")
         monthTextView.text = formatter.format(date)
+    }
+
+    private fun updateMeter() {
+        val doneLayout = doneMeterView.layoutParams
+        doneLayout.width = (doneMeterProgress * this.width).toInt()
+        doneMeterView.layoutParams = doneLayout
+
+        val laterLayout = laterMeterView.layoutParams
+        laterLayout.width = (laterMeterProgress * this.width).toInt()
+        laterMeterView.layoutParams = laterLayout
+
+        val doneAnim = ValueAnimator.ofInt(doneMeterView.measuredWidth, (doneMeterProgress * this.measuredWidth).toInt())
+        doneAnim.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            val layoutParams = doneMeterView.layoutParams
+            layoutParams.width = value
+            doneMeterView.layoutParams = layoutParams
+        }
+        doneAnim.duration = 200
+        doneAnim.start()
+
+        val laterAnim = ValueAnimator.ofInt(laterMeterView.measuredWidth, ((laterMeterProgress + doneMeterProgress) * this.measuredWidth).toInt())
+        laterAnim.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            val layoutParams = laterMeterView.layoutParams
+            layoutParams.width = value
+            laterMeterView.layoutParams = layoutParams
+        }
+        laterAnim.duration = 200
+        laterAnim.start()
+
+        if (doneMeterProgress >= 1f) {
+            doneMeterView.setBackgroundResource(R.drawable.rounded_green)
+        } else {
+            doneMeterView.setBackgroundResource(R.drawable.left_rounded_green)
+        }
+
+        if (laterMeterProgress + doneMeterProgress >= 1f) {
+            laterMeterView.setBackgroundResource(R.drawable.rounded_yellow)
+        } else {
+            laterMeterView.setBackgroundResource(R.drawable.left_rounded_yellow)
+        }
     }
 }

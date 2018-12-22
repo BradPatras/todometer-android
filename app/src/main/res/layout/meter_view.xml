@@ -73,31 +73,39 @@
 
 	<FrameLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/meter_container"
 		android:layout_width="match_parent"
 		android:layout_height="16dp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
+		android:animateLayoutChanges="true"
 		app:layout_constraintTop_toBottomOf="@id/day_num_tv">
 
 		<View
+			android:transformPivotX="0px"
 			android:id="@+id/back_meter"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:background="@drawable/rounded_dark"
+			android:layout_gravity="start"
 		/>
 
 		<View
 			android:id="@+id/later_meter"
-			android:layout_width="200dp"
 			android:layout_height="match_parent"
+			android:layout_width="0dp"
 			android:background="@drawable/left_rounded_yellow"
+			android:transformPivotX="0px"
+			android:layout_gravity="start"
 		/>
 
 		<View
 			android:id="@+id/done_meter"
-			android:layout_width="50dp"
+			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:background="@drawable/left_rounded_green"
+			android:transformPivotX="0px"
+			android:layout_gravity="start"
 		/>
 
 	</FrameLayout>
