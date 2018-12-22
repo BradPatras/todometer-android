@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/center_spacer"
         app:layout_constraintLeft_toRightOf="@id/day_num_tv"
+		app:layout_constraintBaseline_toBaselineOf="@id/day_num_tv"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:layout_marginLeft="4dp"
