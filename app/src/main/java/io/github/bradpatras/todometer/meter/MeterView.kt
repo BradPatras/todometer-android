@@ -2,16 +2,12 @@ package io.github.bradpatras.todometer.meter
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.TextView
 import io.github.bradpatras.todometer.R
 import kotlinx.android.synthetic.main.meter_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.view.ViewGroup
 import android.animation.ValueAnimator
 
 
@@ -28,13 +24,13 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
     var laterMeterProgress: Float = 0.0f
         set(value) {
             field = value
-            updateMeter()
+            updateMeters()
         }
 
     var doneMeterProgress: Float = 0.0f
         set(value) {
             field = value
-            updateMeter()
+            updateMeters()
         }
 
     init {
@@ -53,7 +49,7 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
         monthTextView.text = formatter.format(date)
     }
 
-    private fun updateMeter() {
+    private fun updateMeters() {
         val doneLayout = doneMeterView.layoutParams
         doneLayout.width = (doneMeterProgress * this.width).toInt()
         doneMeterView.layoutParams = doneLayout
@@ -69,7 +65,7 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
             layoutParams.width = value
             doneMeterView.layoutParams = layoutParams
         }
-        doneAnim.duration = 200
+        doneAnim.duration = 250
         doneAnim.start()
 
         val laterAnim = ValueAnimator.ofInt(laterMeterView.measuredWidth, ((laterMeterProgress + doneMeterProgress) * this.measuredWidth).toInt())
@@ -79,7 +75,7 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
             layoutParams.width = value
             laterMeterView.layoutParams = layoutParams
         }
-        laterAnim.duration = 200
+        laterAnim.duration = 250
         laterAnim.start()
 
         if (doneMeterProgress >= 1f) {
