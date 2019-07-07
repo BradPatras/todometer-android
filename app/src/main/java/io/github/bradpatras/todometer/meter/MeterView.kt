@@ -1,15 +1,14 @@
 package io.github.bradpatras.todometer.meter
 
+import android.animation.ValueAnimator
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.github.bradpatras.todometer.R
 import kotlinx.android.synthetic.main.meter_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.animation.ValueAnimator
-
 
 
 class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {

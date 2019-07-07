@@ -1,6 +1,6 @@
 package io.github.bradpatras.todometer
 
-import android.arch.persistence.room.*
+import androidx.room.*
 
 enum class TaskState(val rawValue: Int) {
     ACTIVE(1),
@@ -19,6 +19,9 @@ data class Task(
 interface TaskDao {
     @Query("SELECT * FROM task")
     fun getAll(): List<Task>
+
+    @Query("SELECT * FROM task WHERE task_state = (:rawState)")
+    fun getAllWithState(rawState: Int): List<Task>
 
     @Update
     fun updateAll(vararg task: Task)
