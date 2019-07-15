@@ -28,43 +28,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-
-        addtodo_btn.setOnClickListener {
-            todoItems++
-            updateTodoMeter()
-        }
-
-        done_btn.setOnClickListener {
-            if (doneItems + laterItems >= todoItems) return@setOnClickListener
-            doneItems++
-            updateTodoMeter()
-        }
-
-        addlater_btn.setOnClickListener {
-            if (laterItems + doneItems >= todoItems) return@setOnClickListener
-            laterItems++
-            updateTodoMeter()
-        }
-
-        subtractlater_btn.setOnClickListener {
-            if (laterItems == 0) return@setOnClickListener
-            laterItems--
-            doneItems++
-            updateTodoMeter()
-        }
     }
 
     private fun updateTodoMeter() {
         todo_meter.doneMeterProgress = doneItems.toFloat() / todoItems.toFloat()
         todo_meter.laterMeterProgress = laterItems.toFloat() / todoItems.toFloat()
-    }
-
-    override fun onBackPressed() {
-        todoItems = 12
-        doneItems = 0
-        laterItems = 0
-        todo_meter.laterMeterProgress = laterItems.toFloat() / todoItems.toFloat()
-        todo_meter.doneMeterProgress = doneItems.toFloat() / todoItems.toFloat()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -88,21 +56,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_camera -> {
                 // Handle the camera action
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
             }
         }
 
