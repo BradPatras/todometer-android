@@ -24,10 +24,10 @@ interface TaskDao {
     fun getAllWithState(rawState: Int): List<Task>
 
     @Update
-    fun updateAll(vararg task: Task)
+    fun updateAll(tasks: List<Task>)
 
-    @Insert
-    fun insertAll(vararg task: Task)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(tasks: List<Task>)
 
     @Delete
     fun delete(task: Task)
