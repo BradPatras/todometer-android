@@ -6,7 +6,10 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'kotlin-android-extensions'
 
+
+
 android {
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "io.github.bradpatras.todometer"
@@ -22,6 +25,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kapt {
+        generateStubs = true
+    }
 }
 
 dependencies {
@@ -30,6 +36,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
+    implementation "com.google.dagger:dagger:2.24"
+    kapt 'com.google.dagger:dagger-compiler:2.24'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
