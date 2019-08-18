@@ -1,4 +1,4 @@
-package io.github.bradpatras.todometer
+package io.github.bradpatras.todometer.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
