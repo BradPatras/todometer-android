@@ -9,16 +9,37 @@
         tools:showIn="@layout/app_bar_main"
         tools:context=".MainActivity">
 
-	<io.github.bradpatras.todometer.meter.MeterView
+	<View
+		android:id="@+id/view"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:background="@color/activityBackground"
+		android:elevation="4dp"
+		app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<io.github.bradpatras.todometer.views.MeterView
 		android:id="@+id/todo_meter"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		android:layout_marginTop="20dp"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="20dp"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-	/>
+		android:layout_marginLeft="20dp"
+		android:layout_marginTop="20dp"
+		android:layout_marginRight="20dp"
+		android:elevation="4dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/recyclerView"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_marginTop="8dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/todo_meter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,9 +3,7 @@ package io.github.bradpatras.todometer.data
 import javax.inject.Inject
 
 class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
-    init {
-        print("initializing")
-    }
+
     fun doSomething() {
         val task =
             Task(

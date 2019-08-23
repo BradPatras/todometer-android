@@ -1,4 +1,4 @@
-package io.github.bradpatras.todometer.meter
+package io.github.bradpatras.todometer.views
 
 import android.animation.ValueAnimator
 import android.content.Context
