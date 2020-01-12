@@ -1,11 +1,18 @@
 package io.github.bradpatras.todometer
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.bradpatras.todometer.data.TaskRepository
+import io.github.bradpatras.todometer.tasklist.TaskAdapter
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -16,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private var doneItems = 0
     private var laterItems = 0
 
+    private var taskListAdapter: TaskAdapter? = null
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     @Inject
     lateinit var taskRepository: TaskRepository
 
@@ -26,10 +35,24 @@ class MainActivity : AppCompatActivity() {
 
         TodoMeterApplication.instance.applicationComponent.inject(this)
 
-        Single.just(taskRepository)
+        compositeDisposable.addAll(Single.just(taskRepository)
             .observeOn(Schedulers.io())
             .map { it.doSomething() }
-            .subscribe()
+            .map { updateTaskList() }
+            .subscribe())
+
+        val taskAdapter = this.taskListAdapter ?: TaskAdapter(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = taskAdapter
+        taskListAdapter = taskAdapter
+    }
+
+    private fun updateTaskList() {
+        compositeDisposable.add(taskRepository.getActiveTasks()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { tasks ->
+                taskListAdapter?.tasks = tasks
+            })
     }
 
     private fun updateTodoMeter() {

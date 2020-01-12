@@ -6,4 +6,7 @@
     <color name="activityBackground">#413D4E</color>
     <color name="meterYellow">#f1ff67</color>
     <color name="meterGreen">#00e6a7</color>
+    <color name="tasklistItemText">#F3F3F3</color>
+    <color name="taskListItemBackgroundLight">#6c6a81</color>
+    <color name="taskListItemBackground">#3d3c49</color>
 </resources>
