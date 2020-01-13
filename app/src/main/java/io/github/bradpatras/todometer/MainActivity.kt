@@ -51,7 +51,13 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.add(taskRepository.getActiveTasks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { tasks ->
-                taskListAdapter?.tasks = tasks
+                taskListAdapter?.activeTasks = tasks
+            })
+
+        compositeDisposable.add(taskRepository.getLaterTasks()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { tasks ->
+                taskListAdapter?.laterTasks = tasks
             })
     }
 

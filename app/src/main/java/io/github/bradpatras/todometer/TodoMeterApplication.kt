@@ -2,7 +2,7 @@ package io.github.bradpatras.todometer
 
 import android.app.Application
 
-class TodoMeterApplication: Application() {
+class TodoMeterApplication : Application() {
     lateinit var applicationComponent: ApplicationComponent
 
     init {
