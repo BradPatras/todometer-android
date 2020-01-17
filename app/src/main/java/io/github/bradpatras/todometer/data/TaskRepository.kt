@@ -1,6 +1,5 @@
 package io.github.bradpatras.todometer.data
 
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -8,9 +7,21 @@ import javax.inject.Inject
 class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
 
     fun doSomething() {
-        val task = Task(0, "Do the thing", TaskState.ACTIVE.rawValue)
-        val later = Task(1, "Also do this", TaskState.LATER.rawValue)
+        val task = Task(0,"Do the thing", TaskState.ACTIVE.rawValue)
+        val later = Task(0,"Also do this", TaskState.LATER.rawValue)
         taskDao.insertAll(listOf(task, later))
+    }
+
+    fun insertTask(task: Task): Single<Unit> {
+        return Single.just(task)
+            .observeOn(Schedulers.io())
+            .map { taskDao.insertAll(listOf(it)) }
+    }
+
+    fun updateTask(task: Task): Single<Unit> {
+        return Single.just(task)
+            .observeOn(Schedulers.io())
+            .map { taskDao.updateAll(listOf(it)) }
     }
 
     fun getActiveTasks(): Single<List<Task>> {
@@ -26,6 +37,14 @@ class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
             .observeOn(Schedulers.io())
             .map {
                 taskDao.getAllWithState(TaskState.LATER.rawValue)
+            }
+    }
+
+    fun cancelTask(task: Task): Single<Unit> {
+        return Single.just(task)
+            .observeOn(Schedulers.io())
+            .map {
+                taskDao.delete(it)
             }
     }
 }

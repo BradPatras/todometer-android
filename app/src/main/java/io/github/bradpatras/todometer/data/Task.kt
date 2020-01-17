@@ -10,7 +10,7 @@ enum class TaskState(val rawValue: Int) {
 
 @Entity
 data class Task(
-    @PrimaryKey var id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
     @ColumnInfo(name = "task_title") var taskTitle: String?,
     @ColumnInfo(name = "task_state") var taskState: Int = TaskState.ACTIVE.rawValue
 )
