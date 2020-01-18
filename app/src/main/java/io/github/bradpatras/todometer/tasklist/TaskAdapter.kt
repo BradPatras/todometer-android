@@ -3,7 +3,6 @@ package io.github.bradpatras.todometer.tasklist
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.github.bradpatras.todometer.R
 import io.github.bradpatras.todometer.data.Task
@@ -16,20 +15,15 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     private var taskSection: TaskSection? = null
     private var laterSection: TaskSection? = null
 
-    var itemActionHandler: TaskAdapter.ItemActionHandler? = null
+    var itemActionHandler: ItemActionHandler? = null
 
-    var activeTasks: List<Task> = emptyList()
+    var tasks: List<Task> = emptyList()
         set(value) {
             field = value
-            taskSection = TaskSection(tasks = value)
+            taskSection = TaskSection(tasks = value.filter { it.taskState == TaskState.ACTIVE.rawValue })
+            laterSection = TaskSection("Do Later", value.filter { it.taskState == TaskState.LATER.rawValue })
+            notifyDataSetChanged()
         }
-
-    var laterTasks: List<Task> = emptyList()
-        set(value) {
-            field = value
-            laterSection = TaskSection("Do Later", value)
-        }
-
 
     override fun getItemViewType(position: Int): Int {
         val taskCount = taskSection?.itemCount ?: 0

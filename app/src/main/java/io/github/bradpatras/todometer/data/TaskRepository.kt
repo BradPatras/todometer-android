@@ -1,10 +1,12 @@
 package io.github.bradpatras.todometer.data
 
+import androidx.lifecycle.LiveData
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
+    val allTasks: LiveData<List<Task>> = taskDao.getAll()
 
     fun doSomething() {
         val task = Task(0,"Do the thing", TaskState.ACTIVE.rawValue)

@@ -1,5 +1,6 @@
 package io.github.bradpatras.todometer.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 enum class TaskState(val rawValue: Int) {
@@ -17,8 +18,8 @@ data class Task(
 
 @Dao
 interface TaskDao {
-    @Query("SELECT * FROM task")
-    fun getAll(): List<Task>
+    @Query("SELECT * FROM task ORDER by id ASC")
+    fun getAll(): LiveData<List<Task>>
 
     @Query("SELECT * FROM task WHERE task_state = :rawState")
     fun getAllWithState(rawState: Int): List<Task>

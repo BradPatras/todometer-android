@@ -1,29 +1,22 @@
 package io.github.bradpatras.todometer
 
-import android.content.Context
+import android.app.Activity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.bradpatras.todometer.data.Task
 import io.github.bradpatras.todometer.data.TaskRepository
 import io.github.bradpatras.todometer.data.TaskState
 import io.github.bradpatras.todometer.tasklist.TaskAdapter
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
-import android.app.Activity
-import android.view.inputmethod.InputMethodManager
-import io.github.bradpatras.todometer.Utilities.BiFun
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 
 class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
     private var todoItems = 12
@@ -32,8 +25,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
     private var taskListAdapter: TaskAdapter? = null
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    @Inject
-    lateinit var taskRepository: TaskRepository
+    @Inject lateinit var taskRepository: TaskRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,32 +46,18 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
                 add_et.text.clear()
                 add_et.clearFocus()
                 hideKeyboardFrom(add_et)
-                updateTaskList()
-                    .subscribe { _ -> taskListAdapter?.notifyDataSetChanged() }
             }
         }
 
-        compositeDisposable.add(
-                updateTaskList().subscribe { _ ->
-                    taskListAdapter?.notifyDataSetChanged()
-                }
-        )
+        taskRepository.allTasks.observe(this, Observer { tasks: List<Task> ->
+                taskListAdapter?.tasks = tasks
+        })
     }
 
     private fun hideKeyboardFrom(view: View) {
         (this.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager)?.let {
             it.hideSoftInputFromWindow(view.windowToken, 0)
         }
-    }
-
-    private fun updateTaskList(): Single<Unit> {
-        return taskRepository.getActiveTasks()
-            .zipWith( taskRepository.getLaterTasks(), BiFunction { actives: List<Task>, laters: List<Task> -> Pair(actives, laters) })
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { tasksPair: Pair<List<Task>, List<Task>> ->
-                taskListAdapter?.activeTasks = tasksPair.first
-                taskListAdapter?.laterTasks = tasksPair.second
-            }
     }
 
     private fun updateTodoMeter() {
@@ -106,40 +84,20 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
     override fun laterPressed(adapter: TaskAdapter, task: Task) {
         task.taskState = TaskState.LATER.rawValue
-        compositeDisposable.add(taskRepository.updateTask(task)
-            .zipWith(updateTaskList(), BiFun.empty())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ ->
-                adapter.notifyDataSetChanged()
-            })
+        compositeDisposable.add(taskRepository.updateTask(task).subscribe())
     }
 
     override fun resumePressed(adapter: TaskAdapter, task: Task) {
         task.taskState = TaskState.ACTIVE.rawValue
-        compositeDisposable.add(taskRepository.updateTask(task)
-            .zipWith(updateTaskList(), BiFun.empty())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ ->
-                adapter.notifyDataSetChanged()
-            })
+        compositeDisposable.add(taskRepository.updateTask(task).subscribe())
     }
 
     override fun donePressed(adapter: TaskAdapter, task: Task) {
         task.taskState = TaskState.COMPLETE.rawValue
-        compositeDisposable.add(taskRepository.updateTask(task)
-            .zipWith(updateTaskList(), BiFun.empty())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ ->
-                adapter.notifyDataSetChanged()
-            })
+        compositeDisposable.add(taskRepository.updateTask(task).subscribe())
     }
 
     override fun cancelPressed(adapter: TaskAdapter, task: Task) {
-        compositeDisposable.add(taskRepository.cancelTask(task)
-            .zipWith(updateTaskList(), BiFun.empty())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ ->
-                adapter.notifyDataSetChanged()
-            })
+        compositeDisposable.add(taskRepository.cancelTask(task).subscribe())
     }
 }
