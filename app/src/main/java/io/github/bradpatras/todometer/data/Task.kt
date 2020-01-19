@@ -32,4 +32,7 @@ interface TaskDao {
 
     @Delete
     fun delete(task: Task)
+
+    @Query("DELETE FROM task WHERE task_state = :rawState")
+    fun deleteAllWithState(rawState: Int): Unit
 }

@@ -1,6 +1,7 @@
 package io.github.bradpatras.todometer
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.github.bradpatras.todometer.Utilities.onDone
 import io.github.bradpatras.todometer.data.Task
 import io.github.bradpatras.todometer.data.TaskRepository
 import io.github.bradpatras.todometer.data.TaskState
@@ -42,16 +44,35 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
         add_btn.setOnClickListener {
             if (add_et.text.isNotBlank()) {
-                taskRepository.insertTask(Task(0, add_et.text.toString(), TaskState.ACTIVE.rawValue)).subscribe()
-                add_et.text.clear()
-                add_et.clearFocus()
+                submitTask()
                 hideKeyboardFrom(add_et)
+            } else {
+                add_et.requestFocus()
+                showKeyboardFor(add_et)
             }
         }
 
+        add_et.onDone {
+            if (add_et.text.isNotBlank()) {
+                submitTask()
+            }
+            hideKeyboardFrom(add_et)
+        }
+
         taskRepository.allTasks.observe(this, Observer { tasks: List<Task> ->
-                taskListAdapter?.tasks = tasks
+            val laterTasks = tasks.filter { it.taskState == TaskState.LATER.rawValue }
+            val activeTasks = tasks.filter { it.taskState == TaskState.ACTIVE.rawValue }
+            val doneTasks = tasks.filter { it.taskState == TaskState.COMPLETE.rawValue }
+            taskListAdapter?.tasks = activeTasks + laterTasks
+            updateTodoMeter(activeTasks, laterTasks, doneTasks)
         })
+    }
+
+    private fun submitTask() {
+        taskRepository.insertTask(Task(0, add_et.text.toString(), TaskState.ACTIVE.rawValue)).subscribe()
+        add_et.text.clear()
+        add_et.clearFocus()
+        taskListAdapter?.itemCount?.let { recyclerView.scrollToPosition(it - 1) }
     }
 
     private fun hideKeyboardFrom(view: View) {
@@ -60,24 +81,41 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
         }
     }
 
-    private fun updateTodoMeter() {
-        todo_meter.doneMeterProgress = doneItems.toFloat() / todoItems.toFloat()
-        todo_meter.laterMeterProgress = laterItems.toFloat() / todoItems.toFloat()
+    private fun showKeyboardFor(view: View) {
+        (this.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager)?.let {
+            it.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    private fun updateTodoMeter(active: List<Task>, later: List<Task>, done: List<Task>) {
+        val taskCount = active.count() + later.count() + done.count()
+        todo_meter.doneMeterProgress = done.count().toFloat() / taskCount.toFloat()
+        todo_meter.laterMeterProgress = later.count().toFloat() / taskCount.toFloat()
+    }
+
+    private fun resetProgress() {
+        taskRepository.clearDoneTasks().subscribe()
+    }
+
+    private fun showAbout() {
+        startActivity(Intent(this, AboutActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_reset -> true
-            R.id.action_about -> true
+            R.id.action_reset -> {
+                resetProgress()
+                return true
+            }
+            R.id.action_about -> {
+                showAbout()
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

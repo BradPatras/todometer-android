@@ -64,7 +64,7 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
             layoutParams.width = value
             doneMeterView.layoutParams = layoutParams
         }
-        doneAnim.duration = 250
+        doneAnim.duration = 650
         doneAnim.start()
 
         val laterAnim = ValueAnimator.ofInt(laterMeterView.measuredWidth, ((laterMeterProgress + doneMeterProgress) * this.measuredWidth).toInt())
@@ -74,7 +74,7 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
             layoutParams.width = value
             laterMeterView.layoutParams = layoutParams
         }
-        laterAnim.duration = 250
+        laterAnim.duration = 650
         laterAnim.start()
 
         if (doneMeterProgress >= 1f) {

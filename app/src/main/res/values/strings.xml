@@ -1,12 +1,18 @@
 <resources>
-    <string name="app_name">todometer</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_reset">Reset Progress</string>
-    <string name="action_about">About</string>
+	<string name="app_name">todometer</string>
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	<string name="nav_header_title">Android Studio</string>
+	<string name="nav_header_subtitle">android.studio@android.com</string>
+	<string name="nav_header_desc">Navigation header</string>
+	<string name="action_reset">Reset Progress</string>
+	<string name="action_about">About</string>
+	<string name="about_text">This app is an open source Android remake of the Electron desktop app \'todometer\'.  \n\nFor implementation details and libraries used, check out the repository on Github. \n\nPull requests welcome!</string>
 	<string name="add_button_description">Add Button</string>
 	<string name="add_new_item_hint">Add new item</string>
+	<string name="todometer_android_gh"> /todometer-android</string>
+	<string name="todometer_gh"> /todometer</string>
+	<string name="todometer_gh_link">https://github.com/Cassidoo/todometer</string>
+	<string name="todometer_android_gh_link">https://github.com/BradPatras/todometer-android</string>
+	<string name="about_original">The original Electron desktop app is also open source, check it out below!</string>
 </resources>
