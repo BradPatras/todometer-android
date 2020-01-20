@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
         val taskAdapter = this.taskListAdapter ?: TaskAdapter(this)
         taskAdapter.itemActionHandler = this
+        taskAdapter.setHasStableIds(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = taskAdapter
         taskListAdapter = taskAdapter

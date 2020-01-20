@@ -38,6 +38,11 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        // if task for position returns null, it means the position refers to a header item
+        return taskForPosition(position)?.id ?: -1L
+    }
+
     fun taskForPosition(position: Int): Task? {
         val taskCount = taskSection?.itemCount ?: 0
 
