@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
             val laterTasks = tasks.filter { it.taskState == TaskState.LATER.rawValue }
             val activeTasks = tasks.filter { it.taskState == TaskState.ACTIVE.rawValue }
             val doneTasks = tasks.filter { it.taskState == TaskState.COMPLETE.rawValue }
-            taskListAdapter?.tasks = activeTasks + laterTasks
+            taskListAdapter?.tasks = activeTasks + laterTasks + doneTasks
             updateTodoMeter(activeTasks, laterTasks, doneTasks)
         })
     }
@@ -138,5 +138,10 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
     override fun cancelPressed(adapter: TaskAdapter, task: Task) {
         compositeDisposable.add(taskRepository.cancelTask(task).subscribe())
+    }
+
+    override fun resetPressed(adapter: TaskAdapter, task: Task) {
+        task.taskState = TaskState.ACTIVE.rawValue
+        compositeDisposable.add(taskRepository.updateTask(task).subscribe())
     }
 }
