@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.tasklist_section_header.view.*
 
 class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
-    private var taskSection: TaskSection? = null
+    var taskSection: TaskSection? = null
     private var laterSection: TaskSection? = null
     private var completedSection: TaskSection? = null
 

@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
             if (add_et.text.isNotBlank()) {
                 submitTask()
                 hideKeyboardFrom(add_et)
+                add_et.clearFocus()
             } else {
                 add_et.requestFocus()
                 showKeyboardFor(add_et)
@@ -57,7 +58,6 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
             if (add_et.text.isNotBlank()) {
                 submitTask()
             }
-            hideKeyboardFrom(add_et)
         }
 
         taskRepository.allTasks.observe(this, Observer { tasks: List<Task> ->
@@ -72,8 +72,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
     private fun submitTask() {
         taskRepository.insertTask(Task(0, add_et.text.toString(), TaskState.ACTIVE.rawValue)).subscribe()
         add_et.text.clear()
-        add_et.clearFocus()
-        taskListAdapter?.itemCount?.let { recyclerView.scrollToPosition(it - 1) }
+        taskListAdapter?.taskSection?.itemCount?.let { recyclerView.scrollToPosition(it - 1) }
     }
 
     private fun hideKeyboardFrom(view: View) {
