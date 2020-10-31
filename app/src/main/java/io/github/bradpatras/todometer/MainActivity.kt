@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
         todo_meter.laterMeterProgress = later.count().toFloat() / taskCount.toFloat()
     }
 
-    private fun resetProgress() {
+    private fun clearCompleted() {
         taskRepository.clearDoneTasks().subscribe()
     }
 
@@ -108,8 +108,8 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_reset -> {
-                resetProgress()
+            R.id.action_clear_completed -> {
+                clearCompleted()
                 return true
             }
             R.id.action_about -> {

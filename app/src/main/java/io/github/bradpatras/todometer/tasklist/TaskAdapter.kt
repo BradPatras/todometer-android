@@ -102,26 +102,23 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
         val task = taskForPosition(position) ?: return
         holder.itemView.task_tv.text = task.taskTitle
 
+        holder.itemView.cancel_btn.setOnClickListener { itemActionHandler?.cancelPressed(this, task) }
+
         if (task.taskState == TaskState.LATER.rawValue) {
             holder.itemView.later_btn.setOnClickListener { itemActionHandler?.resumePressed(this, task) }
             holder.itemView.later_btn.setImageResource(R.drawable.ic_resume)
             holder.itemView.done_btn.setImageResource(R.drawable.ic_done)
             holder.itemView.done_btn.setOnClickListener { itemActionHandler?.donePressed(this, task) }
-            holder.itemView.cancel_btn.setOnClickListener { itemActionHandler?.cancelPressed(this, task) }
-            holder.itemView.cancel_btn.visibility = View.VISIBLE
             holder.itemView.later_btn.visibility = View.VISIBLE
         } else if (task.taskState == TaskState.ACTIVE.rawValue) {
             holder.itemView.later_btn.setOnClickListener { itemActionHandler?.laterPressed(this, task) }
             holder.itemView.later_btn.setImageResource(R.drawable.ic_pause)
             holder.itemView.done_btn.setImageResource(R.drawable.ic_done)
             holder.itemView.done_btn.setOnClickListener { itemActionHandler?.donePressed(this, task) }
-            holder.itemView.cancel_btn.setOnClickListener { itemActionHandler?.cancelPressed(this, task) }
-            holder.itemView.cancel_btn.visibility = View.VISIBLE
             holder.itemView.later_btn.visibility = View.VISIBLE
         } else {
             holder.itemView.done_btn.setOnClickListener { itemActionHandler?.resetPressed(this, task) }
             holder.itemView.done_btn.setImageResource(R.drawable.ic_reset)
-            holder.itemView.cancel_btn.visibility = View.GONE
             holder.itemView.later_btn.visibility = View.GONE
         }
     }
