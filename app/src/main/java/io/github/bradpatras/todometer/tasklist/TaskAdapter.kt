@@ -165,7 +165,7 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (section.isCollapsible) {
             holder.itemView.collapse_iv.visibility = View.VISIBLE
-            holder.itemView.collapse_iv.rotation = if (section.isCollapsed) 90f else 180f
+            holder.itemView.collapse_iv.rotation = if (section.isCollapsed) 0f else 90f
             holder.itemView.setOnClickListener { onSectionPressed(section) }
         } else {
             holder.itemView.collapse_iv.visibility = View.GONE
