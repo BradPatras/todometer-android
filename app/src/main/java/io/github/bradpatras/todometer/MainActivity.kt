@@ -21,9 +21,6 @@ import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
-    private var todoItems = 12
-    private var doneItems = 0
-    private var laterItems = 0
 
     private var taskListAdapter: TaskAdapter? = null
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()

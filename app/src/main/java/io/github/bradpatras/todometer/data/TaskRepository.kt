@@ -29,8 +29,6 @@ class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
     fun cancelTask(task: Task): Single<Unit> {
         return Single.just(task)
             .observeOn(Schedulers.io())
-            .map {
-                taskDao.delete(it)
-            }
+            .map { taskDao.delete(it) }
     }
 }
