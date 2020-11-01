@@ -17,14 +17,32 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     private var laterSection: TaskSection? = null
     private var completedSection: TaskSection? = null
 
+    private var isLaterSectionCollapsed: Boolean = false
+    private var isCompletedSectionCollapsed: Boolean = false
+
     var itemActionHandler: ItemActionHandler? = null
 
     var tasks: List<Task> = emptyList()
         set(value) {
             field = value
-            taskSection = TaskSection(0L,tasks = value.filter { it.taskState == TaskState.ACTIVE.rawValue })
-            laterSection = TaskSection(1L,"Do Later", value.filter { it.taskState == TaskState.LATER.rawValue })
-            completedSection = TaskSection(2L,"Completed", value.filter { it.taskState == TaskState.COMPLETE.rawValue })
+            taskSection = TaskSection(
+                id = 0L,
+                tasks = value.filter { it.taskState == TaskState.ACTIVE.rawValue }
+            )
+            laterSection = TaskSection(
+                id = 1L,
+                sectionTitle = "Do Later",
+                tasks = value.filter { it.taskState == TaskState.LATER.rawValue },
+                isCollapsible = true,
+                isCollapsed = isLaterSectionCollapsed
+            )
+            completedSection = TaskSection(
+                id = 2L,
+                sectionTitle = "Completed",
+                tasks = value.filter { it.taskState == TaskState.COMPLETE.rawValue },
+                isCollapsible = true,
+                isCollapsed = isCompletedSectionCollapsed
+            )
             notifyDataSetChanged()
         }
 
@@ -127,9 +145,32 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    private fun onSectionPressed(section: TaskSection) {
+        section.isCollapsed = !section.isCollapsed
+        when (section) {
+            completedSection -> {
+                isCompletedSectionCollapsed = section.isCollapsed
+            }
+            laterSection -> {
+                isLaterSectionCollapsed = section.isCollapsed
+            }
+        }
+        
+        notifyDataSetChanged()
+    }
+
     private fun bindSectionHeaderViewHolder(holder: SectionHeaderViewHolder, position: Int) {
         val section = sectionForPosition(position) ?: return
         holder.itemView.header_tv.text = section.sectionTitle
+
+        if (section.isCollapsible) {
+            holder.itemView.collapse_iv.visibility = View.VISIBLE
+            holder.itemView.collapse_iv.rotation = if (section.isCollapsed) 90f else 180f
+            holder.itemView.setOnClickListener { onSectionPressed(section) }
+        } else {
+            holder.itemView.collapse_iv.visibility = View.GONE
+            holder.itemView.setOnClickListener(null)
+        }
     }
 
     interface ItemActionHandler {
