@@ -7,9 +7,9 @@
     <clip-path
         android:pathData="M0,0h180v180h-180z"/>
     <path
-        android:pathData="M10,123.084L23.831,136.916L90,69.751L156.927,136.678L170,123.084L90,43.084L10,123.084Z"
+        android:pathData="M12.283,118.065L90,40.347L167.717,118.065L150,135L90,75L30,135L12.283,118.065Z"
         android:strokeLineJoin="round"
-        android:strokeWidth="6"
+        android:strokeWidth="12"
         android:fillColor="#000000"
         android:strokeColor="#000000"
         android:strokeLineCap="round"/>
