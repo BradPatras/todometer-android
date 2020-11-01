@@ -15,8 +15,9 @@
 		android:textColor="@color/tasklistItemText"
 		android:textSize="32sp"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		app:layout_constraintStart_toEndOf="@id/collapse_iv"
+		app:layout_constraintTop_toTopOf="parent"
+		android:layout_marginStart="4dp"/>
 
 	<ImageView
 		android:id="@+id/collapse_iv"
@@ -24,10 +25,9 @@
 		android:layout_height="0dp"
 		app:layout_constraintTop_toTopOf="@id/header_tv"
 		app:layout_constraintBottom_toBottomOf="@id/header_tv"
-		app:layout_constraintStart_toEndOf="@id/header_tv"
-		android:layout_marginStart="12dp"
+		app:layout_constraintStart_toStartOf="parent"
 		android:layout_marginTop="10dp"
-		android:layout_marginBottom="4dp"
+		android:layout_marginBottom="6dp"
 		android:scaleType="centerInside"
 		android:src="@drawable/ic_resume"
 		android:rotation="90"

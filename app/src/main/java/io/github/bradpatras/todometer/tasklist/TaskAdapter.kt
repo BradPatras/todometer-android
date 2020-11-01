@@ -155,7 +155,7 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
                 isLaterSectionCollapsed = section.isCollapsed
             }
         }
-        
+
         notifyDataSetChanged()
     }
 
