@@ -10,4 +10,4 @@ A faithful native rewrite of the [todometer Electron app](https://www.github.com
 
 &nbsp;
 
-<img src="snapshot.png" width="250">
+<img src="snapshot.png" width="300">
