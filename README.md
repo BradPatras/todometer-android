@@ -7,6 +7,7 @@ A faithful native rewrite of the [todometer Electron app](https://www.github.com
 - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata): Keeping the UI up to date with the state of the tasks in the database. This plays really well together with Room.
 - [RxJava](https://github.com/ReactiveX/RxJava): Making it possible to chain database events easily in the background. Probably overkill for my purposes.
 - [Dagger](https://github.com/google/dagger): I started the project with the intent of injecting everything but ended up only using it for the repository dependency.
+- [Lottie](https://github.com/airbnb/lottie-android): For a fun little animation when you complete all your tasks
 
 &nbsp;
 
@@ -16,6 +17,8 @@ A faithful native rewrite of the [todometer Electron app](https://www.github.com
 
 ## Releases
 
+### 2.1 | November 2020
+- Added Lottie animation when all tasks are completed
 ### 2.0 | November 2020
 - Added 'Completed' section
 - Made 'Do Later' and 'Completed' sections collapsible 
