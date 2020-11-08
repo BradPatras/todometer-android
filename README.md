@@ -11,3 +11,14 @@ A faithful native rewrite of the [todometer Electron app](https://www.github.com
 &nbsp;
 
 <img src="snapshot.png" width="300">
+
+&nbsp;
+
+## Releases
+
+### 2.0 | October 2020
+- Added 'Completed' section
+- Made 'Do Later' and 'Completed' sections collapsible 
+- Tweaked the behavior of the add todo text field to make quickly adding multiple items easier
+### 1.0 | January 2020
+- Initial release!
