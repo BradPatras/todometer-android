@@ -1,4 +1,4 @@
-package io.github.bradpatras.todometer.Utilities
+package io.github.bradpatras.todometer.utilities
 
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText

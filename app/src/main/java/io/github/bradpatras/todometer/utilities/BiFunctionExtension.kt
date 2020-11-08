@@ -1,4 +1,4 @@
-package io.github.bradpatras.todometer.Utilities
+package io.github.bradpatras.todometer.utilities
 
 import io.reactivex.functions.BiFunction
 
