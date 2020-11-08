@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
     private var taskListAdapter: TaskAdapter? = null
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private var doneWasPressed = false
     @Inject lateinit var taskRepository: TaskRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +64,24 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
             val doneTasks = tasks.filter { it.taskState == TaskState.COMPLETE.rawValue }
             taskListAdapter?.tasks = activeTasks + laterTasks + doneTasks
             updateTodoMeter(activeTasks, laterTasks, doneTasks)
+
+            if (doneWasPressed && doneTasks.isNotEmpty() && activeTasks.isEmpty()) {
+                showDoneAnimation()
+            }
+            doneWasPressed = false
         })
+    }
+
+    private fun showDoneAnimation() {
+        done_animation_view.alpha = 1f
+        done_animation_view.addAnimatorUpdateListener { animator ->
+            if (animator.animatedFraction >= 1f) {
+                done_animation_view.animate().alpha(0f).withEndAction {
+                    done_animation_view.progress = 0f
+                }.start()
+            }
+        }
+        done_animation_view.playAnimation()
     }
 
     private fun submitTask() {
@@ -128,8 +146,13 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
     }
 
     override fun donePressed(adapter: TaskAdapter, task: Task) {
+        doneWasPressed = true
         task.taskState = TaskState.COMPLETE.rawValue
-        compositeDisposable.add(taskRepository.updateTask(task).subscribe())
+        compositeDisposable.add(taskRepository.updateTask(task).subscribe { _ ->
+            if (taskListAdapter?.taskSection?.itemCount == 0) {
+                showDoneAnimation()
+            }
+        })
     }
 
     override fun cancelPressed(adapter: TaskAdapter, task: Task) {
