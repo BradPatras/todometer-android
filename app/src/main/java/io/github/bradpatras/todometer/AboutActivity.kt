@@ -2,8 +2,7 @@ package io.github.bradpatras.todometer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import io.github.bradpatras.todometer.R
-import io.github.bradpatras.todometer.Utilities.WebLinkHelper
+import io.github.bradpatras.todometer.utilities.WebLinkHelper
 import kotlinx.android.synthetic.main.activity_about.*
 
 class AboutActivity : AppCompatActivity() {
