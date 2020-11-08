@@ -15,4 +15,7 @@
 	<string name="todometer_gh_link">https://github.com/Cassidoo/todometer</string>
 	<string name="todometer_android_gh_link">https://github.com/BradPatras/todometer-android</string>
 	<string name="about_original">The original Electron desktop app is also open source, check it out below!</string>
+	<string name="lottie_btn">Mark Geyer @LottieFiles</string>
+	<string name="lottie_attribution">Confetti Cannon animation by Mark Geyer on LottieFiles</string>
+	<string name="lottie_link">https://lottiefiles.com/7893-confetti-cannons</string>
 </resources>

@@ -18,5 +18,9 @@ class AboutActivity : AppCompatActivity() {
         android_gh_btn.setOnClickListener {
             WebLinkHelper.openWebLink(this, resources.getString(R.string.todometer_android_gh_link))
         }
+
+        lottie_btn.setOnClickListener {
+            WebLinkHelper.openWebLink(this, resources.getString(R.string.lottie_link))
+        }
     }
 }
