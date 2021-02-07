@@ -21,9 +21,6 @@ interface TaskDao {
     @Query("SELECT * FROM task ORDER by id ASC")
     fun getAll(): LiveData<List<Task>>
 
-    @Query("SELECT * FROM task WHERE task_state = :rawState")
-    fun getAllWithState(rawState: Int): List<Task>
-
     @Update
     fun updateAll(tasks: List<Task>)
 
