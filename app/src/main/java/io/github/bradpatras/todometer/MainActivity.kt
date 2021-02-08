@@ -49,17 +49,9 @@ class MainActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
         add_btn.setOnClickListener {
             if (add_et.text.isNotBlank()) {
                 submitTask()
-                add_et.hideKeyboard()
-                add_et.clearFocus()
             } else {
                 add_et.requestFocus()
                 add_et.showKeyboard()
-            }
-        }
-
-        add_et.onDone {
-            if (add_et.text.isNotBlank()) {
-                submitTask()
             }
         }
 

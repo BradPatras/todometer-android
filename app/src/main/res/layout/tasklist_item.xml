@@ -61,6 +61,7 @@
 		android:layout_marginTop="16dp"
 		android:layout_marginBottom="16dp"
 		android:textColor="@color/tasklistItemText"
+		android:textIsSelectable="true"
 		android:textSize="16sp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toStartOf="@+id/cancel_btn"
