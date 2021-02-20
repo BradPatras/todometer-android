@@ -93,11 +93,11 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.tasklist_item -> {
-                val binding = TasklistItemBinding.inflate(layoutInflater)
+                val binding = TasklistItemBinding.inflate(layoutInflater, parent, false)
                 TaskViewHolder(binding)
             }
             else -> {
-                val binding = TasklistSectionHeaderBinding.inflate(layoutInflater)
+                val binding = TasklistSectionHeaderBinding.inflate(layoutInflater, parent, false)
                 SectionHeaderViewHolder(binding)
             }
         }
