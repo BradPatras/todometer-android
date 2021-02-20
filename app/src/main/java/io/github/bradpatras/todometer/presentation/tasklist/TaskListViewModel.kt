@@ -4,11 +4,16 @@ import androidx.lifecycle.*
 import io.github.bradpatras.core.domain.Task
 import io.github.bradpatras.core.domain.TaskState
 import io.github.bradpatras.core.interactors.*
+import io.github.bradpatras.todometer.TodoMeterApplication
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import javax.inject.Inject
 
 class TaskListViewModel : ViewModel() {
+
+    init {
+        TodoMeterApplication.instance.applicationComponent.inject(this)
+    }
 
     @Inject
     lateinit var addTask: AddTaskUc
