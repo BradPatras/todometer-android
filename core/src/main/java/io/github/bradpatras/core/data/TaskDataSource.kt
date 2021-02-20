@@ -2,17 +2,18 @@ package io.github.bradpatras.core.data
 
 import io.github.bradpatras.core.domain.Task
 import io.github.bradpatras.core.domain.TaskState
+import kotlinx.coroutines.flow.Flow
 
 interface TaskDataSource {
 
-    fun getAll(): List<Task>
+    fun getAll(): Flow<List<Task>>
 
-    fun add(task: Task)
+    suspend fun add(task: Task)
 
-    fun update(task: Task)
+    suspend fun update(task: Task)
 
-    fun cancel(task: Task)
+    suspend fun cancel(task: Task)
 
-    fun removeAllWithState(state: TaskState)
+    suspend fun removeAllWithState(state: TaskState)
 
 }

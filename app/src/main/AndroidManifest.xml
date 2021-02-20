@@ -12,11 +12,11 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme"
 		tools:ignore="GoogleAppIndexingWarning">
-		<activity android:name=".AboutActivity"
+		<activity android:name=".presentation.AboutActivity"
 			android:label="@string/action_about"
 			/>
 		<activity
-			android:name=".MainActivity"
+			android:name=".presentation.tasklist.TaskListActivity"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>

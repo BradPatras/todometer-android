@@ -1,6 +1,6 @@
-package io.github.bradpatras.todometer.tasklist
+package io.github.bradpatras.todometer.presentation.tasklist
 
-import io.github.bradpatras.todometer.data.Task
+import io.github.bradpatras.core.domain.Task
 
 class TaskSection(
     val id: Long,
