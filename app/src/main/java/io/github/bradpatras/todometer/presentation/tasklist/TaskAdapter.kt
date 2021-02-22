@@ -1,15 +1,15 @@
-package io.github.bradpatras.todometer.tasklist
+package io.github.bradpatras.todometer.presentation.tasklist
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import io.github.bradpatras.core.domain.Task
+import io.github.bradpatras.core.domain.TaskState
 import io.github.bradpatras.todometer.R
-import io.github.bradpatras.todometer.data.Task
-import io.github.bradpatras.todometer.data.TaskState
-import kotlinx.android.synthetic.main.tasklist_item.view.*
-import kotlinx.android.synthetic.main.tasklist_section_header.view.*
+import io.github.bradpatras.todometer.databinding.TasklistItemBinding
+import io.github.bradpatras.todometer.databinding.TasklistSectionHeaderBinding
 
 class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
@@ -27,19 +27,19 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
             field = value
             taskSection = TaskSection(
                 id = 0L,
-                tasks = value.filter { it.taskState == TaskState.ACTIVE.rawValue }
+                tasks = value.filter { it.state == TaskState.ACTIVE }
             )
             laterSection = TaskSection(
                 id = 1L,
                 sectionTitle = "Do Later",
-                tasks = value.filter { it.taskState == TaskState.LATER.rawValue },
+                tasks = value.filter { it.state == TaskState.LATER },
                 isCollapsible = true,
                 isCollapsed = isLaterSectionCollapsed
             )
             completedSection = TaskSection(
                 id = 2L,
                 sectionTitle = "Completed",
-                tasks = value.filter { it.taskState == TaskState.COMPLETE.rawValue },
+                tasks = value.filter { it.state == TaskState.COMPLETE },
                 isCollapsible = true,
                 isCollapsed = isCompletedSectionCollapsed
             )
@@ -93,12 +93,12 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.tasklist_item -> {
-                val view = layoutInflater.inflate(R.layout.tasklist_item, parent, false)
-                TaskViewHolder(view)
+                val binding = TasklistItemBinding.inflate(layoutInflater, parent, false)
+                TaskViewHolder(binding)
             }
             else -> {
-                val view = layoutInflater.inflate(R.layout.tasklist_section_header, parent, false)
-                SectionHeaderViewHolder(view)
+                val binding = TasklistSectionHeaderBinding.inflate(layoutInflater, parent, false)
+                SectionHeaderViewHolder(binding)
             }
         }
     }
@@ -118,29 +118,29 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
 
     private fun bindTaskViewHolder(holder: TaskViewHolder, position: Int) {
         val task = taskForPosition(position) ?: return
-        holder.itemView.task_tv.text = task.taskTitle
+        holder.binding.taskTv.text = task.title
 
-        holder.itemView.cancel_btn.setOnClickListener { itemActionHandler?.cancelPressed(this, task) }
+        holder.binding.cancelBtn.setOnClickListener { itemActionHandler?.cancelPressed(this, task) }
 
-        when (task.taskState) {
-            TaskState.LATER.rawValue -> {
-                holder.itemView.later_btn.setOnClickListener { itemActionHandler?.resumePressed(this, task) }
-                holder.itemView.later_btn.setImageResource(R.drawable.ic_resume)
-                holder.itemView.done_btn.setImageResource(R.drawable.ic_done)
-                holder.itemView.done_btn.setOnClickListener { itemActionHandler?.donePressed(this, task) }
-                holder.itemView.later_btn.visibility = View.VISIBLE
+        when (task.state) {
+            TaskState.LATER -> {
+                holder.binding.laterBtn.setOnClickListener { itemActionHandler?.resumePressed(this, task) }
+                holder.binding.laterBtn.setImageResource(R.drawable.ic_resume)
+                holder.binding.doneBtn.setImageResource(R.drawable.ic_done)
+                holder.binding.doneBtn.setOnClickListener { itemActionHandler?.donePressed(this, task) }
+                holder.binding.laterBtn.visibility = View.VISIBLE
             }
-            TaskState.ACTIVE.rawValue -> {
-                holder.itemView.later_btn.setOnClickListener { itemActionHandler?.laterPressed(this, task) }
-                holder.itemView.later_btn.setImageResource(R.drawable.ic_pause)
-                holder.itemView.done_btn.setImageResource(R.drawable.ic_done)
-                holder.itemView.done_btn.setOnClickListener { itemActionHandler?.donePressed(this, task) }
-                holder.itemView.later_btn.visibility = View.VISIBLE
+            TaskState.ACTIVE -> {
+                holder.binding.laterBtn.setOnClickListener { itemActionHandler?.laterPressed(this, task) }
+                holder.binding.laterBtn.setImageResource(R.drawable.ic_pause)
+                holder.binding.doneBtn.setImageResource(R.drawable.ic_done)
+                holder.binding.doneBtn.setOnClickListener { itemActionHandler?.donePressed(this, task) }
+                holder.binding.laterBtn.visibility = View.VISIBLE
             }
             else -> {
-                holder.itemView.done_btn.setOnClickListener { itemActionHandler?.resetPressed(this, task) }
-                holder.itemView.done_btn.setImageResource(R.drawable.ic_reset)
-                holder.itemView.later_btn.visibility = View.GONE
+                holder.binding.doneBtn.setOnClickListener { itemActionHandler?.resetPressed(this, task) }
+                holder.binding.doneBtn.setImageResource(R.drawable.ic_reset)
+                holder.binding.laterBtn.visibility = View.GONE
             }
         }
     }
@@ -161,14 +161,14 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
 
     private fun bindSectionHeaderViewHolder(holder: SectionHeaderViewHolder, position: Int) {
         val section = sectionForPosition(position) ?: return
-        holder.itemView.header_tv.text = section.sectionTitle
+        holder.binding.headerTv.text = section.sectionTitle
 
         if (section.isCollapsible) {
-            holder.itemView.collapse_iv.visibility = View.VISIBLE
-            holder.itemView.collapse_iv.rotation = if (section.isCollapsed) 0f else 90f
+            holder.binding.collapseIv.visibility = View.VISIBLE
+            holder.binding.collapseIv.rotation = if (section.isCollapsed) 0f else 90f
             holder.itemView.setOnClickListener { onSectionPressed(section) }
         } else {
-            holder.itemView.collapse_iv.visibility = View.GONE
+            holder.binding.collapseIv.visibility = View.GONE
             holder.itemView.setOnClickListener(null)
         }
     }

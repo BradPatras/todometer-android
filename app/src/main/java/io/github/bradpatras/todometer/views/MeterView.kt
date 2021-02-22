@@ -6,19 +6,12 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.github.bradpatras.todometer.R
-import kotlinx.android.synthetic.main.meter_view.view.*
+import io.github.bradpatras.todometer.databinding.MeterViewBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
-    private val rootView = LayoutInflater.from(context).inflate(R.layout.meter_view, this) as ConstraintLayout
-    private val dayNumTextView = day_num_tv
-    private val dayWeekTextView = day_week_tv
-    private val yearTextView = year_tv
-    private val monthTextView = month_tv
-    private val doneMeterView = done_meter
-    private val laterMeterView = later_meter
+    private val binding = MeterViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     var laterMeterProgress: Float = 0.0f
         set(value) {
@@ -36,57 +29,57 @@ class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(contex
         val date = Date()
 
         val formatter = SimpleDateFormat("EEEE", Locale.US)
-        dayWeekTextView.text = formatter.format(date)
+        binding.dayWeekTv.text = formatter.format(date)
 
         formatter.applyPattern("yyyy")
-        yearTextView.text = formatter.format(date)
+        binding.yearTv.text = formatter.format(date)
 
         formatter.applyPattern("dd")
-        dayNumTextView.text = formatter.format(date)
+        binding.dayNumTv.text = formatter.format(date)
 
         formatter.applyPattern("MMM")
-        monthTextView.text = formatter.format(date)
+        binding.monthTv.text = formatter.format(date)
     }
 
     private fun updateMeters() {
-        val doneLayout = doneMeterView.layoutParams
+        val doneLayout = binding.doneMeter.layoutParams
         doneLayout.width = (doneMeterProgress * this.width).toInt()
-        doneMeterView.layoutParams = doneLayout
+        binding.doneMeter.layoutParams = doneLayout
 
-        val laterLayout = laterMeterView.layoutParams
+        val laterLayout = binding.laterMeter.layoutParams
         laterLayout.width = (laterMeterProgress * this.width).toInt()
-        laterMeterView.layoutParams = laterLayout
+        binding.laterMeter.layoutParams = laterLayout
 
-        val doneAnim = ValueAnimator.ofInt(doneMeterView.measuredWidth, (doneMeterProgress * this.measuredWidth).toInt())
+        val doneAnim = ValueAnimator.ofInt(binding.doneMeter.measuredWidth, (doneMeterProgress * this.measuredWidth).toInt())
         doneAnim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
-            val layoutParams = doneMeterView.layoutParams
+            val layoutParams = binding.doneMeter.layoutParams
             layoutParams.width = value
-            doneMeterView.layoutParams = layoutParams
+            binding.doneMeter.layoutParams = layoutParams
         }
         doneAnim.duration = 650
         doneAnim.start()
 
-        val laterAnim = ValueAnimator.ofInt(laterMeterView.measuredWidth, ((laterMeterProgress + doneMeterProgress) * this.measuredWidth).toInt())
+        val laterAnim = ValueAnimator.ofInt(binding.laterMeter.measuredWidth, ((laterMeterProgress + doneMeterProgress) * this.measuredWidth).toInt())
         laterAnim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
-            val layoutParams = laterMeterView.layoutParams
+            val layoutParams = binding.laterMeter.layoutParams
             layoutParams.width = value
-            laterMeterView.layoutParams = layoutParams
+            binding.laterMeter.layoutParams = layoutParams
         }
         laterAnim.duration = 650
         laterAnim.start()
 
         if (doneMeterProgress >= 1f) {
-            doneMeterView.setBackgroundResource(R.drawable.rounded_green)
+            binding.doneMeter.setBackgroundResource(R.drawable.rounded_green)
         } else {
-            doneMeterView.setBackgroundResource(R.drawable.left_rounded_green)
+            binding.doneMeter.setBackgroundResource(R.drawable.left_rounded_green)
         }
 
         if (laterMeterProgress + doneMeterProgress >= 1f) {
-            laterMeterView.setBackgroundResource(R.drawable.rounded_yellow)
+            binding.laterMeter.setBackgroundResource(R.drawable.rounded_yellow)
         } else {
-            laterMeterView.setBackgroundResource(R.drawable.left_rounded_yellow)
+            binding.laterMeter.setBackgroundResource(R.drawable.left_rounded_yellow)
         }
     }
 }

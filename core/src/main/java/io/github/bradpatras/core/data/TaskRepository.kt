@@ -2,10 +2,12 @@ package io.github.bradpatras.core.data
 
 import io.github.bradpatras.core.domain.Task
 import io.github.bradpatras.core.domain.TaskState
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 class TaskRepository(private val dataSource: TaskDataSource) {
 
-    suspend fun getAll(): List<Task> {
+    fun getAll(): Flow<List<Task>> {
         return dataSource.getAll()
     }
 
