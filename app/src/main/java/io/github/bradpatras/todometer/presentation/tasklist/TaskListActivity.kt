@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.bradpatras.core.domain.Task
 import io.github.bradpatras.todometer.R
 import io.github.bradpatras.todometer.TodoMeterApplication
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class TaskListActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
 
     private lateinit var binding: ActivityMainBinding
@@ -29,8 +31,6 @@ class TaskListActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
     private val viewModel: TaskListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        TodoMeterApplication.instance.applicationComponent.inject(this)
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

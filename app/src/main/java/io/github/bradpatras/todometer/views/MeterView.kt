@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MeterView(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs) {
-    private val binding = MeterViewBinding.inflate(LayoutInflater.from(context))
+    private val binding = MeterViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     var laterMeterProgress: Float = 0.0f
         set(value) {
