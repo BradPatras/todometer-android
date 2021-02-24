@@ -1,6 +1,6 @@
 # todometer-android
 
-A faithful native rewrite of the [todometer Electron app](https://www.github.com/cassidoo/todometer) project here on Github.
+A faithful native rewrite of the [todometer desktop app](https://www.github.com/cassidoo/todometer) project by Cassidy Williams here on Github.
 
 ## Libraries and Frameworks Used
 - [Room](https://developer.android.com/topic/libraries/architecture/room): Local database. Storage of the task objects locally on-device
