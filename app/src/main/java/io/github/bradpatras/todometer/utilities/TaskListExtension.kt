@@ -1,7 +1,7 @@
-package io.github.bradpatras.todometer.presentation.tasklist
+package io.github.bradpatras.todometer.utilities
 
-import io.github.bradpatras.core.domain.Task
-import io.github.bradpatras.core.domain.TaskState
+import io.github.bradpatras.todometer.core.domain.Task
+import io.github.bradpatras.todometer.core.domain.TaskState
 
 fun List<Task>.doneTasks(): List<Task> = this.filter { it.state == TaskState.COMPLETE }
 

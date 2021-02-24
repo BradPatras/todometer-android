@@ -12,11 +12,11 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme"
 		tools:ignore="GoogleAppIndexingWarning">
-		<activity android:name=".presentation.AboutActivity"
+		<activity android:name="io.github.bradpatras.todometer.feature.about.AboutActivity"
 			android:label="@string/action_about"
 			/>
 		<activity
-			android:name=".presentation.tasklist.TaskListActivity"
+			android:name="io.github.bradpatras.todometer.feature.tasklist.TaskListActivity"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
