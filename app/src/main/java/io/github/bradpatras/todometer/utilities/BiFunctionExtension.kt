@@ -1,6 +1,7 @@
 package io.github.bradpatras.todometer.utilities
 
-import io.reactivex.functions.BiFunction
+import java.util.function.BiFunction
+
 
 class BiFun {
     companion object {
