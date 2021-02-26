@@ -1,4 +1,4 @@
-package io.github.bradpatras.todometer.core
+package io.github.bradpatras.todometer
 
 import io.github.bradpatras.todometer.core.data.TaskRepository
 import io.github.bradpatras.todometer.core.domain.Task
