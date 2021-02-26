@@ -1,8 +1,10 @@
-package io.github.bradpatras.todometer.utilities
+package io.github.bradpatras.todometer
 
 import io.github.bradpatras.todometer.core.domain.Task
 import io.github.bradpatras.todometer.core.domain.TaskState
 import io.github.bradpatras.todometer.data.TaskEntity
+import io.github.bradpatras.todometer.utilities.toEntity
+import io.github.bradpatras.todometer.utilities.toTask
 import org.junit.Test
 import org.junit.Assert.assertEquals
 

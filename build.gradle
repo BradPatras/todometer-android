@@ -1,5 +1,19 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+tasks.register("runOnGitHub") {
+    dependsOn(":app:testDebugUnitTest")
+    group = "custom"
+    description = "runs unit tests"
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
+    }
+}
+
 buildscript {
     ext.kotlin_version = '1.4.30'
     ext.hilt_version = '2.32-alpha'

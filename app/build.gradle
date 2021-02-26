@@ -36,6 +36,9 @@ android {
     kapt {
         generateStubs = true
     }
+    sourceSets {
+        test.java.srcDirs += 'src/test/java/io.github.bradpatras.todometer'
+    }
 }
 
 dependencies {
