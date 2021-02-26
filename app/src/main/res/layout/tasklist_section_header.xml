@@ -31,6 +31,5 @@
 		android:adjustViewBounds="true"
 		android:scaleType="fitCenter"
 		android:src="@drawable/ic_arrow"
-		android:tint="@android:color/white"
-		/>
+		app:tint="@android:color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>
