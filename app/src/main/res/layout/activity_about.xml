@@ -5,12 +5,16 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".feature.about.AboutActivity">
+	tools:context=".feature.about.AboutActivity"
+	android:clipChildren="false"
+	android:clipToPadding="false">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:context=".feature.about.AboutActivity">
+		tools:context=".feature.about.AboutActivity"
+		android:clipChildren="false"
+		android:clipToPadding="false">
 
 		<Button
 			android:id="@+id/lottie_btn"
@@ -137,6 +141,18 @@
 			android:orientation="vertical"
 			app:layout_constraintGuide_percent=".5"
 			/>
+
+		<com.airbnb.lottie.LottieAnimationView
+			android:id="@+id/confetti_animation_view"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:alpha="0"
+			android:scaleType="centerCrop"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:lottie_rawRes="@raw/confetti" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

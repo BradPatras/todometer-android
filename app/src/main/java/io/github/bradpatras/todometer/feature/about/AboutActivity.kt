@@ -29,5 +29,19 @@ class AboutActivity : AppCompatActivity() {
         binding.lottieBtn.setOnClickListener {
             viewModel.showLottieWebpage()
         }
+
+        binding.aboutLottieTv.setOnClickListener {
+            binding.confettiAnimationView.apply {
+                alpha = 1f
+                addAnimatorUpdateListener { animator ->
+                    if (animator.animatedFraction >= 1f) {
+                        animate().alpha(0f).withEndAction {
+                            progress = 0f
+                        }.start()
+                    }
+                }
+                playAnimation()
+            }
+        }
     }
 }
