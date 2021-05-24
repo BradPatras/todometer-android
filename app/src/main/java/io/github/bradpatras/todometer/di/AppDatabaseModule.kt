@@ -6,8 +6,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.github.bradpatras.todometer.core.data.AppPreferencesRepository
 import io.github.bradpatras.todometer.core.data.TaskRepository
 import io.github.bradpatras.todometer.data.AppDatabase
+import io.github.bradpatras.todometer.data.LocalAppPreferencesDataSource
 import io.github.bradpatras.todometer.data.RoomTaskDataSource
 import io.github.bradpatras.todometer.data.TaskDao
 import javax.inject.Singleton
@@ -31,5 +33,11 @@ class AppDatabaseModule {
     @Provides
     fun provideTaskRepository(roomDataSource: RoomTaskDataSource): TaskRepository {
         return TaskRepository(roomDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppPreferencesRepository(localDataSource: LocalAppPreferencesDataSource): AppPreferencesRepository {
+        return AppPreferencesRepository(localDataSource)
     }
 }
