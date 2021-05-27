@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppPreferencesDataSource {
      fun getPreferencesFlow(): Flow<AppPreferences>
+     suspend fun setPreferences(appPreferences: AppPreferences)
 }

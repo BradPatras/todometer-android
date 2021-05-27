@@ -2,7 +2,7 @@ package io.github.bradpatras.todometer.feature.tasklist
 
 import io.github.bradpatras.todometer.core.domain.Task
 
-class TaskSection(
+data class TaskSection(
     val id: Long,
     val sectionTitle: String? = null,
     val tasks: List<Task>,
@@ -18,3 +18,24 @@ class TaskSection(
 
     val hasTitle = sectionTitle != null
 }
+class TaskSectionFactory {
+    companion object {
+        fun main() = TaskSection(id = 0L, tasks = emptyList(), isCollapsible = false)
+
+        fun later() = TaskSection(
+            id = 1L,
+            sectionTitle = "Do Later",
+            tasks = emptyList(),
+            isCollapsible = true
+        )
+
+        fun completed() = TaskSection(
+            id = 2L,
+            sectionTitle = "Completed",
+            tasks = emptyList(),
+            isCollapsible = true,
+            isCollapsed = true
+        )
+    }
+}
+

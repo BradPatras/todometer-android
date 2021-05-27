@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.bradpatras.todometer.core.domain.Task
 import io.github.bradpatras.todometer.R
+import io.github.bradpatras.todometer.core.domain.AppPreferences
 import io.github.bradpatras.todometer.databinding.ActivityMainBinding
 import io.github.bradpatras.todometer.feature.about.AboutActivity
 import io.github.bradpatras.todometer.utilities.activeTasks
 import io.github.bradpatras.todometer.utilities.doneTasks
 import io.github.bradpatras.todometer.utilities.laterTasks
 import io.github.bradpatras.todometer.utilities.showKeyboard
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -32,12 +35,9 @@ class TaskListActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        val taskAdapter = this.taskListAdapter ?: TaskAdapter(this)
-        taskAdapter.itemActionHandler = this
-        taskAdapter.setHasStableIds(true)
-        binding.appBarMain.contentMain.recyclerView.layoutManager = LinearLayoutManager(this)
-        contentView.recyclerView.adapter = taskAdapter
-        taskListAdapter = taskAdapter
+        lifecycleScope.launchWhenCreated {
+            setupList()
+        }
 
         contentView.addBtn.setOnClickListener {
             if (contentView.addEt.text.isNotBlank()) {
@@ -47,6 +47,16 @@ class TaskListActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
                 contentView.addEt.showKeyboard()
             }
         }
+    }
+
+    private suspend fun setupList() {
+        val taskAdapter = this.taskListAdapter ?: TaskAdapter(this)
+        taskAdapter.collapsedSectionIds = viewModel.appPreferencesRepository.getAppPreferencesFlow().first().collapsedSectionIds.toTypedArray()
+        taskAdapter.itemActionHandler = this
+        taskAdapter.setHasStableIds(true)
+        binding.appBarMain.contentMain.recyclerView.layoutManager = LinearLayoutManager(this)
+        contentView.recyclerView.adapter = taskAdapter
+        taskListAdapter = taskAdapter
 
         viewModel.tasks.observe(this) { tasks: List<Task> ->
             val laterTasks = tasks.laterTasks()
@@ -56,9 +66,17 @@ class TaskListActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
             updateTodoMeter(activeTasks.count(), laterTasks.count(), doneTasks.count())
         }
 
+        viewModel.appPreferencesRepository.getAppPreferencesFlow().collect { preferences ->
+            updateCollapsedSections(preferences)
+        }
+
         viewModel.allTasksCompleted.observe(this) { allCompleted ->
             if (allCompleted) showDoneAnimation()
         }
+    }
+
+    private fun updateCollapsedSections(preferences: AppPreferences) {
+        taskListAdapter?.collapsedSectionIds = preferences.collapsedSectionIds.toTypedArray()
     }
 
     private fun submitTask() {
@@ -147,6 +165,12 @@ class TaskListActivity : AppCompatActivity(), TaskAdapter.ItemActionHandler {
     override fun resetPressed(adapter: TaskAdapter, task: Task) {
         lifecycleScope.launch {
             viewModel.taskReset(task)
+        }
+    }
+
+    override fun sectionHeaderPressed(adapter: TaskAdapter, section: TaskSection) {
+        lifecycleScope.launch {
+            viewModel.toggleSectionHeaderCollapsed(sectionId = section.id, !section.isCollapsed)
         }
     }
 }

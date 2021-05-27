@@ -24,7 +24,15 @@ class LocalAppPreferencesDataSource @Inject constructor(@ApplicationContext val 
         }
         .map { preferences ->
             val stringIds = preferences[collapsedSectionIdsPrefsKey]
-            val ids: List<Int> = stringIds?.map { it.toInt() } ?: emptyList()
+            val ids: List<Long> = stringIds?.map { it.toLong() } ?: emptyList()
             return@map AppPreferences(ids)
+    }
+
+    override suspend fun setPreferences(appPreferences: AppPreferences) {
+        context.dataStore.updateData { preferences ->
+            return@updateData preferences.toMutablePreferences().apply {
+                this[collapsedSectionIdsPrefsKey] = appPreferences.collapsedSectionIds.map { it.toString() }.toSet()
+            }
+        }
     }
 }

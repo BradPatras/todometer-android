@@ -10,39 +10,37 @@ import io.github.bradpatras.todometer.core.domain.TaskState
 import io.github.bradpatras.todometer.R
 import io.github.bradpatras.todometer.databinding.TasklistItemBinding
 import io.github.bradpatras.todometer.databinding.TasklistSectionHeaderBinding
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 
-class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TaskAdapter(context: Context)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
-    var taskSection: TaskSection? = null
-    private var laterSection: TaskSection? = null
-    private var completedSection: TaskSection? = null
+    var taskSection = TaskSectionFactory.main()
+    private var laterSection = TaskSectionFactory.later()
+    private var completedSection = TaskSectionFactory.completed()
 
-    private var isLaterSectionCollapsed: Boolean = false
-    private var isCompletedSectionCollapsed: Boolean = false
+    var collapsedSectionIds: Array<Long> = emptyArray()
+        set(value) {
+            field = value
+            laterSection.isCollapsed = value.contains(laterSection.id)
+            completedSection.isCollapsed = value.contains(completedSection.id)
+            notifyDataSetChanged()
+        }
 
     var itemActionHandler: ItemActionHandler? = null
 
     var tasks: List<Task> = emptyList()
         set(value) {
             field = value
-            taskSection = TaskSection(
-                id = 0L,
-                tasks = value.filter { it.state == TaskState.ACTIVE }
+            taskSection = taskSection.copy(tasks = value.filter { it.state == TaskState.ACTIVE })
+            laterSection = laterSection.copy(
+                tasks = value.filter { it.state == TaskState.LATER }
             )
-            laterSection = TaskSection(
-                id = 1L,
-                sectionTitle = "Do Later",
-                tasks = value.filter { it.state == TaskState.LATER },
-                isCollapsible = true,
-                isCollapsed = isLaterSectionCollapsed
+            completedSection = completedSection.copy(
+                tasks = value.filter { it.state == TaskState.COMPLETE }
             )
-            completedSection = TaskSection(
-                id = 2L,
-                sectionTitle = "Completed",
-                tasks = value.filter { it.state == TaskState.COMPLETE },
-                isCollapsible = true,
-                isCollapsed = isCompletedSectionCollapsed
-            )
+
             notifyDataSetChanged()
         }
 
@@ -56,33 +54,33 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private fun taskForPosition(position: Int): Task? {
-        val laterSectionHasTitle = laterSection?.hasTitle == true
-        val laterSectionStartIndex = (taskSection?.itemCount ?: 0)
-        val completedSectionHasTitle = completedSection?.hasTitle == true
-        val completedSectionStartIndex = (taskSection?.itemCount ?: 0) + (laterSection?.itemCount ?: 0)
+        val laterSectionHasTitle = laterSection.hasTitle
+        val laterSectionStartIndex = taskSection.itemCount
+        val completedSectionHasTitle = completedSection.hasTitle
+        val completedSectionStartIndex = taskSection.itemCount + laterSection.itemCount
 
         return when (position) {
-            in 0 until laterSectionStartIndex -> taskSection?.tasks?.get(position)
+            in 0 until laterSectionStartIndex -> taskSection.tasks[position]
             in laterSectionStartIndex until completedSectionStartIndex -> {
                 val isFirstLaterIndex = (position == laterSectionStartIndex)
                 val isSectionHeaderIndex = (isFirstLaterIndex && laterSectionHasTitle)
-                val sectionHeaderOffset = if (laterSection?.hasTitle == true) 1 else 0
+                val sectionHeaderOffset = if (laterSection.hasTitle) 1 else 0
                 val laterItemPosition = position - (sectionHeaderOffset + laterSectionStartIndex)
-                if (isSectionHeaderIndex) null else laterSection?.tasks?.get(laterItemPosition)
+                if (isSectionHeaderIndex) null else laterSection.tasks[laterItemPosition]
             }
             else -> {
                 val isFirstCompletedIndex = position == completedSectionStartIndex
                 val isSectionHeaderIndex = (isFirstCompletedIndex && completedSectionHasTitle)
-                val sectionHeaderOffset = if (laterSection?.hasTitle == true) 1 else 0
+                val sectionHeaderOffset = if (laterSection.hasTitle) 1 else 0
                 val completedItemPosition = position - (sectionHeaderOffset + completedSectionStartIndex)
-                if (isSectionHeaderIndex) null else completedSection?.tasks?.get(completedItemPosition)
+                if (isSectionHeaderIndex) null else completedSection.tasks[completedItemPosition]
             }
         }
     }
 
     private fun sectionForPosition(position: Int): TaskSection? {
-        val activeTaskCount = taskSection?.itemCount ?: 0
-        val laterTaskCount = laterSection?.itemCount ?: 0
+        val activeTaskCount = taskSection.itemCount
+        val laterTaskCount = laterSection.itemCount
         return when (position) {
             in 0 until activeTaskCount -> taskSection
             in activeTaskCount until activeTaskCount + laterTaskCount -> laterSection
@@ -104,9 +102,7 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     override fun getItemCount(): Int {
-        return (taskSection?.itemCount ?: 0) +
-                (laterSection?.itemCount ?: 0) +
-                (completedSection?.itemCount ?: 0)
+        return taskSection.itemCount + laterSection.itemCount + completedSection.itemCount
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -146,17 +142,7 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private fun onSectionPressed(section: TaskSection) {
-        section.isCollapsed = !section.isCollapsed
-        when (section) {
-            completedSection -> {
-                isCompletedSectionCollapsed = section.isCollapsed
-            }
-            laterSection -> {
-                isLaterSectionCollapsed = section.isCollapsed
-            }
-        }
-
-        notifyDataSetChanged()
+        itemActionHandler?.sectionHeaderPressed(this, section)
     }
 
     private fun bindSectionHeaderViewHolder(holder: SectionHeaderViewHolder, position: Int) {
@@ -179,5 +165,6 @@ class TaskAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHold
         fun donePressed(adapter: TaskAdapter, task: Task)
         fun cancelPressed(adapter: TaskAdapter, task: Task)
         fun resetPressed(adapter: TaskAdapter, task: Task)
+        fun sectionHeaderPressed(adapter: TaskAdapter, section: TaskSection)
     }
 }

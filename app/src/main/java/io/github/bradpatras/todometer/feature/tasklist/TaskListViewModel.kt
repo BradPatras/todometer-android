@@ -2,6 +2,8 @@ package io.github.bradpatras.todometer.feature.tasklist
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.bradpatras.todometer.core.data.AppPreferencesRepository
+import io.github.bradpatras.todometer.core.data.TaskRepository
 import io.github.bradpatras.todometer.core.domain.Task
 import io.github.bradpatras.todometer.core.domain.TaskState
 import io.github.bradpatras.todometer.core.interactors.AddTaskUc
@@ -14,6 +16,7 @@ import io.github.bradpatras.todometer.core.interactors.ResetTaskUc
 import io.github.bradpatras.todometer.core.interactors.ResumeTaskUc
 import io.github.bradpatras.todometer.utilities.activeTasks
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import javax.inject.Inject
 
@@ -26,12 +29,24 @@ class TaskListViewModel @Inject constructor(
     val cancelTaskUc: CancelTaskUc,
     val pauseTaskUc: PauseTaskUc,
     val resumeTaskUc: ResumeTaskUc,
-    val resetTaskUc: ResetTaskUc
+    val resetTaskUc: ResetTaskUc,
+    val appPreferencesRepository: AppPreferencesRepository
 ) : ViewModel() {
 
     val tasks: LiveData<List<Task>> = getTasksUc().asLiveData()
 
     val allTasksCompleted: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    suspend fun toggleSectionHeaderCollapsed(sectionId: Long, isCollapsed: Boolean) {
+        val preferences = appPreferencesRepository.getAppPreferencesFlow().first()
+        if (isCollapsed && !preferences.collapsedSectionIds.contains(sectionId)) {
+            val newCollapsedSections = preferences.collapsedSectionIds + listOf(sectionId)
+            appPreferencesRepository.setAppPreferences(preferences.copy(collapsedSectionIds = newCollapsedSections))
+        } else if (!isCollapsed) {
+            val newCollapsedSections = preferences.collapsedSectionIds.filter { it != sectionId }
+            appPreferencesRepository.setAppPreferences(preferences.copy(collapsedSectionIds = newCollapsedSections))
+        }
+    }
 
     suspend fun addTask(text: String) {
         addTaskUc(Task(0, text, TaskState.ACTIVE))
